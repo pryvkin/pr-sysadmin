@@ -4,9 +4,10 @@ MAILADDR="admin@localhost"
 
 export AWS_ACCESS_KEY_ID=FILLIN
 export AWS_SECRET_ACCESS_KEY=FILLIN
-export PASSPHRASE=FILLIN
+
 
 GPG_KEY=FILLIN
+export PASSPHRASE=FILLIN
 
 # The source and dest of your backup
 SOURCE=/

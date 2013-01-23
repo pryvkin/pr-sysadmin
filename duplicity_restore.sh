@@ -2,10 +2,10 @@
 
 export AWS_ACCESS_KEY_ID=FILLIN
 export AWS_SECRET_ACCESS_KEY=FILLIN
-export PASSPHRASE=FILLIN
 
 # Your GPG key
 GPG_KEY=FILLIN
+export PASSPHRASE=FILLIN
 
 # The destination
 DEST="s3+http://FILLIN"
