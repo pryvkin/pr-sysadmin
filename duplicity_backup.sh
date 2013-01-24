@@ -2,12 +2,16 @@
 
 MAILADDR="admin@localhost"
 
+# amazon S3 access
 export AWS_ACCESS_KEY_ID=FILLIN
 export AWS_SECRET_ACCESS_KEY=FILLIN
 
-
+# GPG encryption
 GPG_KEY=FILLIN
 export PASSPHRASE=FILLIN
+
+# MySQL root password
+MSQL_PASSWORD=FILLIN
 
 # The source and dest of your backup
 SOURCE=/
@@ -38,6 +42,17 @@ if [ $(date +%d) -eq 1 ]; then
         FULL=full
 fi;
 
+trace "Dump for databases started"
+
+trace "... dumping MySQL databases"
+mkdir -p /var/dbdumps
+mysqldump -u root --password=$MYSQL_PASSWORD --all-databases | \
+  gzip -c > /var/dbdumps/mysql_dump.sql.gz
+
+trace "Dump for databases complete"
+trace "------------------------------------"
+
+
 trace "Backup for local filesystem started"
 
 trace "... removing old backups"
@@ -46,14 +61,16 @@ duplicity remove-older-than ${OLDER_THAN} ${DEST} >> ${DAILYLOGFILE} 2>&1
 
 trace "... backing up filesystem"
 
-# EXCLUDE BIG DIRS HERE: FILLIN
+# FILLIN: Put includes and excludes below
 duplicity \
     ${FULL} \
     --encrypt-key=${GPG_KEY} \
     --sign-key=${GPG_KEY} \
     --volsize=250 \
     --include=/root \
+    --include=/home \
     --include=/etc \
+    --include=/var/dbdumps \
     --exclude=/** \
     ${SOURCE} ${DEST} >> ${DAILYLOGFILE} 2>&1
 
